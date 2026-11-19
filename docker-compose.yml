@@ -1,0 +1,52 @@
+# Personal Finance OS — local development stack.
+# Usage: `cp .env.example .env && docker compose up --build -d`
+#
+#   frontend : http://localhost:3000
+#   backend  : http://localhost:8000/api/v1/health
+#   postgres : localhost:5432
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pfos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pfos_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-pfos}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pfos} -d ${POSTGRES_DB:-pfos}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://pfos:pfos_dev_password@db:5432/pfos}
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
