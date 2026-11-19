@@ -9,8 +9,9 @@ holds or moves funds, and never connects to real bank accounts.
 - **Records:** Manual entry — income, expenses, transfers, accounts, budgets,
   savings goals, recurring bills.
 
-> **Status: Phase 0 — repository & environment foundation.** The financial
-> engine, schema and product features are implemented in later phases.
+> **Status: Phase 1 — authentication & onboarding complete.** The financial
+> engine (ledger), dashboard and product features are implemented in later
+> phases.
 
 ## Repository layout
 
@@ -42,7 +43,23 @@ Then open:
 - Backend health: <http://localhost:8000/api/v1/health>
 - API docs: <http://localhost:8000/api/v1/docs>
 
-Stop with `docker compose down`. Data persists in the `pgdata` volume.
+The backend applies pending Alembic migrations on startup. Stop with
+`docker compose down`. Data persists in the `pgdata` volume.
+
+## Authentication (local development)
+
+The app uses an OIDC-compatible auth layer. By default `AUTH_PROVIDER=dev`
+enables a built-in **local identity provider** so the full flow works without
+AWS or an email service:
+
+1. Visit <http://localhost:3000/register> and create an account.
+2. Complete the 5-stage onboarding wizard (first account included).
+3. You land on the dashboard at <http://localhost:3000/dashboard>.
+
+The dev provider is for local development only (in-memory identities, no real
+password storage). Switch to **Amazon Cognito** by setting `AUTH_PROVIDER=cognito`
+and providing `COGNITO_USER_POOL_ID` / `COGNITO_CLIENT_ID`; the backend verifies
+Cognito JWTs (issuer/audience/signature via JWKS) with no code changes.
 
 ## Host-based development
 
@@ -79,14 +96,14 @@ on every push and pull request (see `.github/workflows/ci.yml`).
 
 ## Phase roadmap
 
-| Phase | Scope                                | Status      |
-| ----- | ------------------------------------ | ----------- |
-| 0     | Repo, Docker, ORM, Alembic, CI, docs | In progress |
-| 1     | Auth (Cognito) + onboarding          | Planned     |
-| 2     | Accounts, transactions, ledger       | Planned     |
-| 3     | Dashboard                            | Planned     |
-| 4     | Budgets                              | Planned     |
-| 5     | Savings + recurring bills            | Planned     |
-| 6     | Reports + exports                    | Planned     |
-| 7     | Security + subscription readiness    | Planned     |
-| 8     | AWS deployment                       | Planned     |
+| Phase | Scope                                | Status     |
+| ----- | ------------------------------------ | ---------- |
+| 0     | Repo, Docker, ORM, Alembic, CI, docs | Done       |
+| 1     | Auth (Cognito) + onboarding          | Done       |
+| 2     | Accounts, transactions, ledger       | Planned    |
+| 3     | Dashboard                            | Planned    |
+| 4     | Budgets                              | Planned    |
+| 5     | Savings + recurring bills            | Planned    |
+| 6     | Reports + exports                    | Planned    |
+| 7     | Security + subscription readiness    | Planned    |
+| 8     | AWS deployment                       | Planned    |

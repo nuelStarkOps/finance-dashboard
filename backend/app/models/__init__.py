@@ -1,8 +1,11 @@
 """ORM models.
 
-Models are added per module in later phases (accounts, transactions, ledger,
-budgets, savings, bills, etc.). Importing them here registers them with the
-SQLAlchemy metadata so Alembic autogenerate can see them.
+Importing models here registers them with SQLAlchemy metadata so Alembic
+autogenerate can discover them.
 """
 
 from app.db.base import Base  # noqa: F401  (re-export for Alembic)
+from app.models.account import Account
+from app.models.user import User, UserPreference
+
+__all__ = ["Account", "Base", "User", "UserPreference"]
