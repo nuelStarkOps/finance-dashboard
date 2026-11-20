@@ -9,9 +9,10 @@ holds or moves funds, and never connects to real bank accounts.
 - **Records:** Manual entry — income, expenses, transfers, accounts, budgets,
   savings goals, recurring bills.
 
-> **Status: Phase 2 — financial engine complete.** Income, expenses, transfers
-> and account balances now work against an immutable ledger. Dashboard and
-> product features are implemented in later phases.
+> **Status: Phase 3 — dashboard complete.** The financial engine feeds a live
+> overview dashboard (summary cards, cash-flow and spending charts, recent
+> activity, account balances). Budgets and further features arrive in later
+> phases.
 
 ## Repository layout
 
@@ -101,7 +102,7 @@ on every push and pull request (see `.github/workflows/ci.yml`).
 | 0     | Repo, Docker, ORM, Alembic, CI, docs | Done       |
 | 1     | Auth (Cognito) + onboarding          | Done       |
 | 2     | Accounts, transactions, ledger       | Done       |
-| 3     | Dashboard                            | Planned    |
+| 3     | Dashboard                            | Done       |
 | 4     | Budgets                              | Planned    |
 | 5     | Savings + recurring bills            | Planned    |
 | 6     | Reports + exports                    | Planned    |
