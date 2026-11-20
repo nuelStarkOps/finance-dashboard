@@ -50,3 +50,34 @@ class CategoryStatus(StrEnum):
 class BudgetStatus(StrEnum):
     ACTIVE = "ACTIVE"
     ARCHIVED = "ARCHIVED"
+
+
+class GoalStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    COMPLETED = "COMPLETED"
+    PAUSED = "PAUSED"
+
+
+class ContributionType(StrEnum):
+    CONTRIBUTION = "CONTRIBUTION"
+    WITHDRAWAL = "WITHDRAWAL"
+    ADJUSTMENT = "ADJUSTMENT"
+
+
+class BillFrequency(StrEnum):
+    WEEKLY = "WEEKLY"
+    MONTHLY = "MONTHLY"
+    QUARTERLY = "QUARTERLY"
+    ANNUALLY = "ANNUALLY"
+    CUSTOM = "CUSTOM"
+
+
+class BillStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    PAUSED = "PAUSED"
+
+
+class OccurrenceStatus(StrEnum):
+    PENDING = "PENDING"
+    PAID = "PAID"
+    SKIPPED = "SKIPPED"

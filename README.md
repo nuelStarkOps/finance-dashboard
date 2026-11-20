@@ -9,9 +9,9 @@ holds or moves funds, and never connects to real bank accounts.
 - **Records:** Manual entry — income, expenses, transfers, accounts, budgets,
   savings goals, recurring bills.
 
-> **Status: Phase 4 — budgets complete.** Overall and category-based budgets
-> with live usage, warnings and over-budget states. Savings, bills and reports
-> arrive in later phases.
+> **Status: Phase 5 — savings, bills & notifications complete.** Savings goals,
+> recurring bills and an in-app notifications bell (with a daily "file your
+> expenses" reminder). Reports and exports arrive next.
 
 ## Repository layout
 
@@ -103,7 +103,7 @@ on every push and pull request (see `.github/workflows/ci.yml`).
 | 2     | Accounts, transactions, ledger       | Done       |
 | 3     | Dashboard                            | Done       |
 | 4     | Budgets                              | Done       |
-| 5     | Savings + bills (+ daily filing reminder) | Planned |
+| 5     | Savings + bills (+ daily filing reminder) | Done  |
 | 6     | Reports + exports                    | Planned    |
 | 7     | Security + subscription readiness    | Planned    |
 | 8     | AWS deployment                       | Planned    |

@@ -147,6 +147,14 @@ export default function DashboardPage() {
     queryKey: ["dashboard", "budgets"],
     queryFn: financeApi.budgetOverview,
   });
+  const savingsGoals = useQuery({
+    queryKey: ["savings-goals"],
+    queryFn: financeApi.savingsGoals,
+  });
+  const bills = useQuery({
+    queryKey: ["bills"],
+    queryFn: financeApi.bills,
+  });
 
   const loading = summary.isLoading || cashflow.isLoading || spending.isLoading;
   const hasData = (recent.data?.length ?? 0) > 0 || (accountOverview.data?.length ?? 0) > 0;
@@ -319,6 +327,72 @@ export default function DashboardPage() {
               </ul>
             </section>
           )}
+
+          {(savingsGoals.data?.length ?? 0) > 0 || (bills.data?.length ?? 0) > 0 ? (
+            <div className="grid gap-6 lg:grid-cols-2">
+              {(savingsGoals.data ?? []).filter((g) => g.status === "ACTIVE").length > 0 && (
+                <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h2 className="text-sm font-semibold">Savings goals</h2>
+                    <Link
+                      href="/savings"
+                      className="text-sm text-indigo-600 hover:underline dark:text-indigo-400"
+                    >
+                      View all
+                    </Link>
+                  </div>
+                  <ul className="space-y-3">
+                    {(savingsGoals.data ?? [])
+                      .filter((g) => g.status === "ACTIVE")
+                      .slice(0, 3)
+                      .map((goal) => (
+                        <li key={goal.id}>
+                          <div className="mb-1 flex justify-between text-sm">
+                            <span className="text-zinc-700 dark:text-zinc-200">{goal.name}</span>
+                            <span className="tabular-nums text-zinc-500 dark:text-zinc-400">
+                              {goal.progress_percent}%
+                            </span>
+                          </div>
+                          <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+                            <div
+                              className="h-full rounded-full bg-indigo-500"
+                              style={{ width: `${Math.min(goal.progress_percent, 100)}%` }}
+                            />
+                          </div>
+                        </li>
+                      ))}
+                  </ul>
+                </section>
+              )}
+
+              {(bills.data ?? []).filter((b) => b.status === "ACTIVE").length > 0 && (
+                <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h2 className="text-sm font-semibold">Upcoming bills</h2>
+                    <Link
+                      href="/bills"
+                      className="text-sm text-indigo-600 hover:underline dark:text-indigo-400"
+                    >
+                      View all
+                    </Link>
+                  </div>
+                  <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    {(bills.data ?? [])
+                      .filter((b) => b.status === "ACTIVE")
+                      .slice(0, 3)
+                      .map((b) => (
+                        <li key={b.id} className="flex items-center justify-between py-2 text-sm">
+                          <span className="text-zinc-700 dark:text-zinc-200">{b.name}</span>
+                          <span className="tabular-nums text-zinc-500 dark:text-zinc-400">
+                            {formatMinor(b.amount_minor, b.currency_code)} · {b.next_due_date}
+                          </span>
+                        </li>
+                      ))}
+                  </ul>
+                </section>
+              )}
+            </div>
+          ) : null}
         </div>
       )}
     </div>

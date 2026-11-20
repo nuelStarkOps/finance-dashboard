@@ -145,6 +145,64 @@ export interface BudgetInput {
   items?: { category_id: string; limit_minor: number }[];
 }
 
+export interface SavingsGoal {
+  id: string;
+  name: string;
+  currency_code: string;
+  target_minor: number;
+  target_date: string | null;
+  priority: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  allocated_minor: number;
+  progress_percent: number;
+}
+
+export interface GoalContribution {
+  id: string;
+  amount_minor: number;
+  contribution_type: "CONTRIBUTION" | "WITHDRAWAL" | "ADJUSTMENT";
+  contribution_date: string;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface Bill {
+  id: string;
+  name: string;
+  amount_minor: number;
+  currency_code: string;
+  category: Category | null;
+  frequency: string;
+  interval_value: number;
+  next_due_date: string;
+  reminder_days: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type OccurrenceStatus = "upcoming" | "due" | "overdue" | "paid" | "skipped";
+
+export interface BillOccurrence {
+  id: string;
+  due_date: string;
+  amount_minor: number;
+  status: OccurrenceStatus;
+  paid_at: string | null;
+  settled_transaction_id: string | null;
+}
+
+export interface AppNotification {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  read_at: string | null;
+  created_at: string;
+}
+
 export interface TransactionInput {
   type: TransactionType;
   amount_minor: number;
@@ -190,6 +248,61 @@ export const financeApi = {
   archiveBudget: (id: string) => apiRequest<Budget>(`/api/v1/budgets/${id}`, { method: "DELETE" }),
   budgetPerformance: (id: string) =>
     apiRequest<BudgetPerformance>(`/api/v1/budgets/${id}/performance`),
+
+  savingsGoals: () => apiRequest<SavingsGoal[]>("/api/v1/savings/goals"),
+  createSavingsGoal: (input: {
+    name: string;
+    currency_code: string;
+    target_minor: number;
+    target_date?: string | null;
+    priority?: string;
+  }) =>
+    apiRequest<SavingsGoal>("/api/v1/savings/goals", {
+      method: "POST",
+      body: JSON.stringify(input),
+    }),
+  addGoalContribution: (
+    goalId: string,
+    input: {
+      amount_minor: number;
+      contribution_type: string;
+      contribution_date: string;
+      notes?: string;
+    },
+  ) =>
+    apiRequest<GoalContribution>(`/api/v1/savings/goals/${goalId}/contributions`, {
+      method: "POST",
+      body: JSON.stringify(input),
+    }),
+
+  bills: () => apiRequest<Bill[]>("/api/v1/bills"),
+  createBill: (input: {
+    name: string;
+    amount_minor: number;
+    currency_code: string;
+    category_id?: string | null;
+    frequency: string;
+    interval_value: number;
+    next_due_date: string;
+    reminder_days?: number;
+  }) => apiRequest<Bill>("/api/v1/bills", { method: "POST", body: JSON.stringify(input) }),
+  toggleBillPause: (id: string) =>
+    apiRequest<Bill>(`/api/v1/bills/${id}/pause`, { method: "POST" }),
+  billOccurrences: (id: string) => apiRequest<BillOccurrence[]>(`/api/v1/bills/${id}/occurrences`),
+  markOccurrencePaid: (id: string, transactionId: string) =>
+    apiRequest<BillOccurrence>(`/api/v1/bill-occurrences/${id}/mark-paid`, {
+      method: "POST",
+      body: JSON.stringify({ transaction_id: transactionId }),
+    }),
+  skipOccurrence: (id: string) =>
+    apiRequest<BillOccurrence>(`/api/v1/bill-occurrences/${id}/skip`, { method: "POST" }),
+
+  notifications: () => apiRequest<AppNotification[]>("/api/v1/notifications"),
+  unreadCount: () => apiRequest<{ count: number }>("/api/v1/notifications/unread-count"),
+  markNotificationRead: (id: string) =>
+    apiRequest<AppNotification>(`/api/v1/notifications/${id}/read`, { method: "POST" }),
+  markAllNotificationsRead: () =>
+    apiRequest<{ message: string }>("/api/v1/notifications/read-all", { method: "POST" }),
 
   accounts: () => apiRequest<Account[]>("/api/v1/accounts"),
   categories: (type?: "INCOME" | "EXPENSE") =>

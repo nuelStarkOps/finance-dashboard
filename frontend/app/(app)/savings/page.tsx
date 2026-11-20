@@ -1,12 +1,5 @@
-import { FeaturePreview } from "@/components/ui/feature-preview";
-import { Target } from "lucide-react";
+import SavingsPage from "@/features/savings/savings-page";
 
-export default function SavingsPage() {
-  return (
-    <FeaturePreview
-      icon={Target}
-      title="Savings Goals"
-      description="Savings goals and contribution tracking arrive in Phase 5."
-    />
-  );
+export default function Page() {
+  return <SavingsPage />;
 }

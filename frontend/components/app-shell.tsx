@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { NavLinks } from "@/components/layout/nav-links";
+import { NotificationsBell } from "@/components/notifications-bell";
 import { AddTransactionDialog } from "@/features/transactions/add-transaction-dialog";
 import { useAuth } from "@/lib/auth/context";
 
@@ -72,6 +73,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="ml-auto flex items-center gap-2">
+            <NotificationsBell />
             <button
               type="button"
               onClick={() => setAddOpen(true)}

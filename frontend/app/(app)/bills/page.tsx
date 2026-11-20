@@ -1,12 +1,5 @@
-import { FeaturePreview } from "@/components/ui/feature-preview";
-import { CalendarClock } from "lucide-react";
+import BillsPage from "@/features/bills/bills-page";
 
-export default function BillsPage() {
-  return (
-    <FeaturePreview
-      icon={CalendarClock}
-      title="Recurring Bills"
-      description="Recurring bills and due-date reminders arrive in Phase 5."
-    />
-  );
+export default function Page() {
+  return <BillsPage />;
 }
