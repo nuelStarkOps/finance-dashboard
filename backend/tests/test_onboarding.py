@@ -42,11 +42,11 @@ def test_update_profile_and_preferences(client: TestClient) -> None:
     resp = client.patch(
         "/api/v1/users/me/preferences",
         headers=headers,
-        json={"theme": "DARK", "preferred_currency": "USD"},
+        json={"theme": "dark", "preferred_currency": "USD"},
     )
     assert resp.status_code == 200
     data = resp.json()["data"]
-    assert data["theme"] == "DARK"
+    assert data["theme"] == "dark"
     assert data["preferred_currency"] == "USD"
 
 

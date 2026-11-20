@@ -3,7 +3,7 @@
 import uuid
 from datetime import date
 
-from sqlalchemy import CHAR, BigInteger, Date, String, Text, Uuid
+from sqlalchemy import CHAR, BigInteger, Date, ForeignKey, String, Text, Uuid
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base, TimestampMixin
@@ -16,7 +16,9 @@ class Account(Base, TimestampMixin):
     __tablename__ = "accounts"
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(Uuid, nullable=False, index=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     account_type: Mapped[str] = mapped_column(
         String(30), nullable=False, default=AccountType.CURRENT.value

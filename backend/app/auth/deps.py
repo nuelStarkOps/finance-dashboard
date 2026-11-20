@@ -10,6 +10,7 @@ from app.auth.cognito import CognitoAuthProvider
 from app.auth.dev import DevAuthProvider
 from app.core.config import settings
 from app.db.session import get_db
+from app.models.enums import Theme
 from app.models.user import User, UserPreference
 
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -87,7 +88,7 @@ def provision_user(db: Session, claims: TokenClaims) -> User:
                 preferred_currency="NGN",
                 timezone="Africa/Lagos",
                 locale="en-NG",
-                theme="SYSTEM",
+                theme=Theme.SYSTEM.value,
                 date_format="DD/MM/YYYY",
                 onboarding_completed=False,
             )

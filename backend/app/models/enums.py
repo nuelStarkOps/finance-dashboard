@@ -21,6 +21,6 @@ class AccountStatus(StrEnum):
 
 
 class Theme(StrEnum):
-    SYSTEM = "SYSTEM"
-    LIGHT = "LIGHT"
-    DARK = "DARK"
+    SYSTEM = "system"
+    LIGHT = "light"
+    DARK = "dark"

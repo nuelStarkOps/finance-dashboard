@@ -1,5 +1,7 @@
 """User preference schemas."""
 
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -20,5 +22,5 @@ class PreferencesUpdate(BaseModel):
     )
     timezone: str | None = Field(default=None, min_length=1, max_length=64)
     locale: str | None = Field(default=None, min_length=1, max_length=16)
-    theme: str | None = Field(default=None, min_length=1, max_length=10)
+    theme: Literal["system", "light", "dark"] | None = None
     date_format: str | None = Field(default=None, min_length=1, max_length=20)
