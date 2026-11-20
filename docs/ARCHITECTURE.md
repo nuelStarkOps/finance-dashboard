@@ -76,7 +76,7 @@ finance-dashboard/
 └── docker-compose.yml
 ```
 
-## 5. Financial correctness invariants (implemented in Phase 2)
+## 5. Financial correctness invariants (implemented)
 
 These rules govern the transaction/ledger engine and are non-negotiable:
 

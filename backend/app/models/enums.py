@@ -24,3 +24,24 @@ class Theme(StrEnum):
     SYSTEM = "system"
     LIGHT = "light"
     DARK = "dark"
+
+
+class TransactionType(StrEnum):
+    INCOME = "INCOME"
+    EXPENSE = "EXPENSE"
+    TRANSFER = "TRANSFER"
+
+
+class TransactionStatus(StrEnum):
+    POSTED = "POSTED"
+    VOIDED = "VOIDED"
+
+
+class CategoryType(StrEnum):
+    INCOME = "INCOME"
+    EXPENSE = "EXPENSE"
+
+
+class CategoryStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    ARCHIVED = "ARCHIVED"

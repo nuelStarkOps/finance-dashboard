@@ -1,4 +1,4 @@
-"""Account schemas (Phase 1 subset)."""
+"""Account schemas (Phase 1 + Phase 2)."""
 
 import uuid
 from datetime import date, datetime
@@ -18,6 +18,16 @@ class AccountCreate(BaseModel):
     description: str | None = Field(default=None, max_length=2000)
 
 
+class AccountUpdate(BaseModel):
+    """Editable fields. Currency is immutable once an account exists."""
+
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    account_type: AccountType | None = None
+    opening_balance_minor: int | None = Field(default=None, ge=0)
+    opening_date: date | None = None
+    description: str | None = Field(default=None, max_length=2000)
+
+
 class AccountOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -30,3 +40,11 @@ class AccountOut(BaseModel):
     description: str | None
     status: str
     created_at: datetime
+
+
+class AccountBalanceOut(BaseModel):
+    account_id: uuid.UUID
+    currency_code: str
+    opening_balance_minor: int
+    posted_minor: int
+    balance_minor: int
