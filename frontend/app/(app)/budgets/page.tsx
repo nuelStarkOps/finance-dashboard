@@ -1,12 +1,5 @@
-import { FeaturePreview } from "@/components/ui/feature-preview";
-import { PieChart } from "lucide-react";
+import BudgetsPage from "@/features/budgets/budgets-page";
 
-export default function BudgetsPage() {
-  return (
-    <FeaturePreview
-      icon={PieChart}
-      title="Budgets"
-      description="Budget planning and progress tracking arrives in Phase 4."
-    />
-  );
+export default function Page() {
+  return <BudgetsPage />;
 }

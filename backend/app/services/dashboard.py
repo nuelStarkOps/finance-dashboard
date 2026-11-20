@@ -197,5 +197,7 @@ def account_overview(db: Session, user: User) -> list[dict]:
 
 
 def budget_overview(db: Session, user: User) -> list[dict]:
-    """Budget progress — implemented in Phase 4. Returns an empty list for now."""
-    return []
+    """Budget progress for the dashboard overview."""
+    from app.services import budgets as budgets_service
+
+    return budgets_service.overview(db, user)

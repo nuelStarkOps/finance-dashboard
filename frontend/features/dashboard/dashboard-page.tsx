@@ -11,11 +11,18 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import Link from "next/link";
+
 import { CurrencyDisplay } from "@/components/ui/currency-display";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SkeletonCard } from "@/components/ui/loading-skeleton";
 import { StatCard } from "@/components/ui/stat-card";
-import { financeApi, type AccountOverviewItem, type Transaction } from "@/lib/api/finance";
+import {
+  financeApi,
+  type AccountOverviewItem,
+  type BudgetOverviewItem,
+  type Transaction,
+} from "@/lib/api/finance";
 import { useAuth } from "@/lib/auth/context";
 import { formatMinor } from "@/lib/currency";
 
@@ -85,6 +92,30 @@ function TransactionRow({ tx }: { tx: Transaction }) {
   );
 }
 
+function BudgetRow({ item }: { item: BudgetOverviewItem }) {
+  const width = Math.min(item.usage_percent ?? 0, 100);
+  const color =
+    item.status === "over"
+      ? "bg-red-500"
+      : item.status === "warning"
+        ? "bg-amber-500"
+        : "bg-indigo-500";
+  return (
+    <li className="py-2.5">
+      <div className="mb-1 flex items-center justify-between text-sm">
+        <span className="text-zinc-700 dark:text-zinc-200">{item.name}</span>
+        <span className="tabular-nums text-zinc-500 dark:text-zinc-400">
+          {formatMinor(item.spent_minor, item.currency_code)} /{" "}
+          {formatMinor(item.limit_minor, item.currency_code)}
+        </span>
+      </div>
+      <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+        <div className={`h-full rounded-full ${color}`} style={{ width: `${width}%` }} />
+      </div>
+    </li>
+  );
+}
+
 export default function DashboardPage() {
   const { user, preferences } = useAuth();
   const [period, setPeriod] = useState("this_month");
@@ -111,6 +142,10 @@ export default function DashboardPage() {
   const accountOverview = useQuery({
     queryKey: ["dashboard", "accounts"],
     queryFn: financeApi.accountOverview,
+  });
+  const budgetOverview = useQuery({
+    queryKey: ["dashboard", "budgets"],
+    queryFn: financeApi.budgetOverview,
   });
 
   const loading = summary.isLoading || cashflow.isLoading || spending.isLoading;
@@ -265,6 +300,25 @@ export default function DashboardPage() {
               )}
             </section>
           </div>
+
+          {budgetOverview.data && budgetOverview.data.length > 0 && (
+            <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="mb-2 flex items-center justify-between">
+                <h2 className="text-sm font-semibold">Budgets</h2>
+                <Link
+                  href="/budgets"
+                  className="text-sm text-indigo-600 hover:underline dark:text-indigo-400"
+                >
+                  View all
+                </Link>
+              </div>
+              <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                {budgetOverview.data.map((b) => (
+                  <BudgetRow key={b.budget_id} item={b} />
+                ))}
+              </ul>
+            </section>
+          )}
         </div>
       )}
     </div>

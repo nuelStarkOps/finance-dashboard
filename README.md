@@ -9,10 +9,9 @@ holds or moves funds, and never connects to real bank accounts.
 - **Records:** Manual entry — income, expenses, transfers, accounts, budgets,
   savings goals, recurring bills.
 
-> **Status: Phase 3 — dashboard complete.** The financial engine feeds a live
-> overview dashboard (summary cards, cash-flow and spending charts, recent
-> activity, account balances). Budgets and further features arrive in later
-> phases.
+> **Status: Phase 4 — budgets complete.** Overall and category-based budgets
+> with live usage, warnings and over-budget states. Savings, bills and reports
+> arrive in later phases.
 
 ## Repository layout
 
@@ -103,8 +102,8 @@ on every push and pull request (see `.github/workflows/ci.yml`).
 | 1     | Auth (Cognito) + onboarding          | Done       |
 | 2     | Accounts, transactions, ledger       | Done       |
 | 3     | Dashboard                            | Done       |
-| 4     | Budgets                              | Planned    |
-| 5     | Savings + recurring bills            | Planned    |
+| 4     | Budgets                              | Done       |
+| 5     | Savings + bills (+ daily filing reminder) | Planned |
 | 6     | Reports + exports                    | Planned    |
 | 7     | Security + subscription readiness    | Planned    |
 | 8     | AWS deployment                       | Planned    |

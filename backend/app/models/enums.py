@@ -45,3 +45,8 @@ class CategoryType(StrEnum):
 class CategoryStatus(StrEnum):
     ACTIVE = "ACTIVE"
     ARCHIVED = "ARCHIVED"
+
+
+class BudgetStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    ARCHIVED = "ARCHIVED"

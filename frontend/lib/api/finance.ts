@@ -79,6 +79,72 @@ export interface AccountOverviewItem {
   balance_minor: number;
 }
 
+export interface BudgetItem {
+  id: string;
+  category_id: string;
+  limit_minor: number;
+  category: Category;
+}
+
+export interface Budget {
+  id: string;
+  name: string;
+  currency_code: string;
+  start_date: string;
+  end_date: string;
+  total_limit_minor: number | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  items: BudgetItem[];
+}
+
+export type BudgetStatus = "ok" | "warning" | "over";
+
+export interface BudgetItemPerformance {
+  category_id: string;
+  name: string;
+  color: string | null;
+  limit_minor: number;
+  spent_minor: number;
+  remaining_minor: number;
+  usage_percent: number | null;
+  status: BudgetStatus;
+}
+
+export interface BudgetPerformance {
+  budget_id: string;
+  name: string;
+  currency_code: string;
+  start_date: string;
+  end_date: string;
+  total_limit_minor: number | null;
+  total_spent_minor: number;
+  total_remaining_minor: number | null;
+  total_usage_percent: number | null;
+  status: BudgetStatus;
+  items: BudgetItemPerformance[];
+}
+
+export interface BudgetOverviewItem {
+  budget_id: string;
+  name: string;
+  currency_code: string;
+  limit_minor: number;
+  spent_minor: number;
+  usage_percent: number | null;
+  status: BudgetStatus;
+}
+
+export interface BudgetInput {
+  name: string;
+  currency_code: string;
+  start_date: string;
+  end_date: string;
+  total_limit_minor?: number | null;
+  items?: { category_id: string; limit_minor: number }[];
+}
+
 export interface TransactionInput {
   type: TransactionType;
   amount_minor: number;
@@ -113,6 +179,17 @@ export const financeApi = {
   recentTransactions: (limit = 5) =>
     apiRequest<Transaction[]>(`/api/v1/dashboard/recent-transactions${qs({ limit })}`),
   accountOverview: () => apiRequest<AccountOverviewItem[]>("/api/v1/dashboard/account-overview"),
+  budgetOverview: () => apiRequest<BudgetOverviewItem[]>("/api/v1/dashboard/budget-overview"),
+
+  budgets: () => apiRequest<Budget[]>("/api/v1/budgets"),
+  createBudget: (input: BudgetInput) =>
+    apiRequest<Budget>("/api/v1/budgets", {
+      method: "POST",
+      body: JSON.stringify(input),
+    }),
+  archiveBudget: (id: string) => apiRequest<Budget>(`/api/v1/budgets/${id}`, { method: "DELETE" }),
+  budgetPerformance: (id: string) =>
+    apiRequest<BudgetPerformance>(`/api/v1/budgets/${id}/performance`),
 
   accounts: () => apiRequest<Account[]>("/api/v1/accounts"),
   categories: (type?: "INCOME" | "EXPENSE") =>

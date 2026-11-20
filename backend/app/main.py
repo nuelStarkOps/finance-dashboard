@@ -1,6 +1,7 @@
 """Application entrypoint."""
 
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -68,7 +69,7 @@ async def validation_exception_handler(
             "error": {
                 "code": "VALIDATION_ERROR",
                 "message": "The supplied data is invalid.",
-                "details": exc.errors(),
+                "details": jsonable_encoder(exc.errors()),
             },
         },
     )
