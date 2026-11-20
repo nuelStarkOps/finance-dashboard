@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRawRequest, apiRequest } from "./client";
 
 export type TransactionType = "INCOME" | "EXPENSE" | "TRANSFER";
 
@@ -203,6 +203,35 @@ export interface AppNotification {
   created_at: string;
 }
 
+export interface CashflowReportPoint {
+  period: string;
+  income_minor: number;
+  expenses_minor: number;
+  net_minor: number;
+}
+
+export interface CategoryReportItem {
+  category_id: string | null;
+  name: string;
+  color: string | null;
+  total_minor: number;
+  percent: number;
+}
+
+export interface SavingsRate {
+  income_minor: number;
+  expenses_minor: number;
+  net_minor: number;
+  savings_rate_percent: number | null;
+}
+
+export interface Insight {
+  type: string;
+  title: string;
+  message: string;
+  severity: "info" | "warning" | "positive";
+}
+
 export interface TransactionInput {
   type: TransactionType;
   amount_minor: number;
@@ -303,6 +332,32 @@ export const financeApi = {
     apiRequest<AppNotification>(`/api/v1/notifications/${id}/read`, { method: "POST" }),
   markAllNotificationsRead: () =>
     apiRequest<{ message: string }>("/api/v1/notifications/read-all", { method: "POST" }),
+
+  reportsCashflow: (params: Record<string, string | undefined>) =>
+    apiRequest<CashflowReportPoint[]>(`/api/v1/reports/cashflow${qs(params)}`),
+  reportsSpending: (params: Record<string, string | undefined>) =>
+    apiRequest<CategoryReportItem[]>(`/api/v1/reports/spending${qs(params)}`),
+  reportsIncome: (params: Record<string, string | undefined>) =>
+    apiRequest<CategoryReportItem[]>(`/api/v1/reports/income${qs(params)}`),
+  reportsSavingsRate: (params: Record<string, string | undefined>) =>
+    apiRequest<SavingsRate>(`/api/v1/reports/savings-rate${qs(params)}`),
+  reportsMonthlyComparison: (params: Record<string, string | undefined>) =>
+    apiRequest<CashflowReportPoint[]>(`/api/v1/reports/monthly-comparison${qs(params)}`),
+  reportsBudgets: () => apiRequest<BudgetOverviewItem[]>("/api/v1/reports/budgets"),
+  reportsInsights: (params: Record<string, string | undefined>) =>
+    apiRequest<Insight[]>(`/api/v1/reports/insights${qs(params)}`),
+  exportReportCsv: async (body: {
+    from?: string | null;
+    to?: string | null;
+    currency?: string | null;
+  }) => {
+    const res = await apiRawRequest("/api/v1/reports/export", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error("Export failed");
+    return res.text();
+  },
 
   accounts: () => apiRequest<Account[]>("/api/v1/accounts"),
   categories: (type?: "INCOME" | "EXPENSE") =>

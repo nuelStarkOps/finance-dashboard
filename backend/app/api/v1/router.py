@@ -10,6 +10,7 @@ from app.api.v1 import (
     dashboard,
     health,
     notifications,
+    reports,
     savings,
     transactions,
     users,
@@ -26,6 +27,7 @@ api_router.include_router(budgets.router)
 api_router.include_router(savings.router)
 api_router.include_router(bills.router)
 api_router.include_router(notifications.router)
+api_router.include_router(reports.router)
 api_router.include_router(dashboard.router)
 
 # Local development identity provider (register/login/recovery simulation).

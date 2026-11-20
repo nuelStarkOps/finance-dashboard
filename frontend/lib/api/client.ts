@@ -66,3 +66,8 @@ export async function apiRequest<T>(path: string, init: RequestInit = {}): Promi
 
   return body?.data as T;
 }
+
+/** Authenticated request that returns the raw Response (for non-JSON downloads). */
+export async function apiRawRequest(path: string, init: RequestInit = {}): Promise<Response> {
+  return rawFetch(path, init);
+}
